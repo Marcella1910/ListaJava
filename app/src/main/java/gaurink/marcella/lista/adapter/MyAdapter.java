@@ -29,12 +29,14 @@ public class MyAdapter extends RecyclerView.Adapter{
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //inflador de layouts, usado para ler arquivo xml do layout do item e assim, criar os elementos do dito cujo
         LayoutInflater inflater = LayoutInflater.from(mainActivity);
         View v = inflater.inflate(R.layout.item_list,parent,false);
         return new MyViewHolder(v);
     }
 
     @Override
+    //preencher a UI com os dados do item
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MyItem myItem = itens.get(position);
         View v = holder.itemView;

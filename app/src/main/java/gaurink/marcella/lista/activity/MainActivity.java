@@ -31,29 +31,36 @@ public class MainActivity extends AppCompatActivity {
     MyAdapter myAdapter;
 
     @Override
+    //criação de metodo para mostrar na interface
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        //colocar conteudo na interface
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.ConstraintLayout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        //criacao do botao para publicação
         FloatingActionButton fabAddItem = findViewById(R.id.fabAddNewItem);
         fabAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
+            //metodo para quando clicar ocorrer a publicação
             public void onClick(View v) {
                 Intent i = new Intent (MainActivity.this,NewItemActivity.class);
                 startActivityForResult(i,NEW_ITEM_REQUEST);
             }
         });
 
+        // configuracao do recycleview
         RecyclerView rvItens = findViewById(R.id.rvItens);
+        myAdapter = new MyAdapter(this,itens);
         rvItens.setAdapter(myAdapter);
 
         rvItens.setHasFixedSize(true);
 
+        //controle do layout
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvItens.setLayoutManager(layoutManager);
 
@@ -61,16 +68,21 @@ public class MainActivity extends AppCompatActivity {
         rvItens.addItemDecoration(dividerItemDecoration);
     }
     @Override
+    //metodo para receber o resultado de outra activity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode,resultCode,data);
+      //se o item nao estiver vazio
       if(requestCode == NEW_ITEM_REQUEST) {
+          //se o item estiver como true
           if(resultCode == Activity.RESULT_OK) {
               MyItem myItem = new MyItem();
               myItem.title = data.getStringExtra("title");
               myItem.description = data.getStringExtra("description");
               myItem.photo = data.getData();
 
+              //adicionar os itens
               itens.add(myItem);
+              //mostrar pra interface que um item ja a estar preenchendo
               myAdapter.notifyItemInserted(itens.size()-1);
           }
       }
