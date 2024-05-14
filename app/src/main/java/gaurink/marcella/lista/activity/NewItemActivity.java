@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import gaurink.marcella.lista.R;
+import gaurink.marcella.lista.model.NewItemActivityViewModel;
 
 public class NewItemActivity extends AppCompatActivity {
 
@@ -34,6 +36,13 @@ public class NewItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_new_item);
+        NewItemActivityViewModel vm = new ViewModelProvider(this).get(NewItemActivityViewModel.class);
+
+        Uri selectPhotoLocation = vm.getSelectPhotoLocation();
+        if (selectPhotoLocation != null) {
+            ImageView imvfotoPrewiew = findViewById(R.id.imvPhotoPrewiew);
+            imvfotoPrewiew.setImageURI(selectPhotoLocation);
+        }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.ConstraintLayout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -100,9 +109,15 @@ public class NewItemActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode == PHOTO_PICKER_REQUEST) {
             if(resultCode == Activity.RESULT_OK) {
-                photoSelected = data.getData();
+                Uri photoSelected = data.getData();
                 ImageView imvfotoPrewiew = findViewById(R.id.imvPhotoPrewiew);
                 imvfotoPrewiew.setImageURI(photoSelected);
+
+                NewItemActivityViewModel vm = new ViewModelProvider(this).get(NewItemActivityViewModel.class);
+                vm.setSelectPhotoLocation(photoSelected);
+                //photoSelected = data.getData();
+                //ImageView imvfotoPrewiew = findViewById(R.id.imvPhotoPrewiew);
+                //imvfotoPrewiew.setImageURI(photoSelected);
             }
         }
     }

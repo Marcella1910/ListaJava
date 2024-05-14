@@ -2,6 +2,8 @@ package gaurink.marcella.lista.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,18 +12,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import gaurink.marcella.lista.R;
 import gaurink.marcella.lista.adapter.MyAdapter;
+import gaurink.marcella.lista.model.MainActivityViewModel;
 import gaurink.marcella.lista.model.MyItem;
+import gaurink.marcella.lista.util.Util;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         // configuracao do recycleview
         RecyclerView rvItens = findViewById(R.id.rvItens);
+        MainActivityViewModel vm = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        List<MyItem> itens = vm.getItens();
         myAdapter = new MyAdapter(this,itens);
         rvItens.setAdapter(myAdapter);
 
@@ -78,7 +86,18 @@ public class MainActivity extends AppCompatActivity {
               MyItem myItem = new MyItem();
               myItem.title = data.getStringExtra("title");
               myItem.description = data.getStringExtra("description");
-              myItem.photo = data.getData();
+              Uri selectedPhotoURI = data.getData();
+
+              try {
+                  Bitmap photo = Util.getBitmap(MainActivity.this, selectedPhotoURI, 100,100);
+
+                  myItem.photo = photo;
+              } catch ( FileNotFoundException e) {
+                  e.printStackTrace();
+              }
+
+              MainActivityViewModel vm = new ViewModelProvider(this).get(MainActivityViewModel.class);
+              List<MyItem> itens = vm.getItens();
 
               //adicionar os itens
               itens.add(myItem);
