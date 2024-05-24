@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
               Uri selectedPhotoURI = data.getData();
 
               try {
+                  //carrega a imagem e a guarda dentro de um Bitmap
                   Bitmap photo = Util.getBitmap(MainActivity.this, selectedPhotoURI, 100,100);
 
                   myItem.photo = photo;

@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import androidx.lifecycle.ViewModel;
 
+//viewmodel irá guardar os dados referentes a NewItemActivity
 public class NewItemActivityViewModel extends ViewModel {
 
     Uri SelectPhotoLocation = null;

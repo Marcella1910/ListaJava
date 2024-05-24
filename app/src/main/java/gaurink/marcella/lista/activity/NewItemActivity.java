@@ -27,8 +27,6 @@ public class NewItemActivity extends AppCompatActivity {
     //definiçaõ de "caminho" que deve seguir
     static int PHOTO_PICKER_REQUEST = 1;
 
-    //elemento de escolha da foto, no momento, vazio
-    Uri photoSelected = null;
 
     @Override
     //metodo para mostrar na interface
@@ -68,6 +66,7 @@ public class NewItemActivity extends AppCompatActivity {
             @Override
             //metodo do que vai acontecer quando clicar no botao
             public void onClick(View v) {
+                Uri photoSelected = vm.getSelectPhotoLocation();
                 //se a foto estiver vazia, nao prosseguira para a proxima tela quando clicar em publicar
                 if(photoSelected == null) {
                     Toast.makeText(NewItemActivity.this, "É necessário selecionar uma imagem!", Toast.LENGTH_LONG).show();
